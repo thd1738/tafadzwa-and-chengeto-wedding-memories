@@ -1,0 +1,9 @@
+{
+  "name": "Tafadzwa & Chengeto Wedding Memory Portal",
+  "description": "An elegant, luxury mobile-first wedding memory sharing website and instant photo/video upload portal for guests.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

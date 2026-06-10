@@ -1,0 +1,104 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny rule for ultimate safety
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global reusable helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // MEMORY SECURITY GATE
+    match /memories/{memoryId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() 
+        && isValidId(memoryId)
+        && isValidMemory(incoming())
+        && incoming().createdAt == request.time;
+        
+      // Enable action-based updates only for liking:
+      allow update: if isSignedIn() 
+        && isValidMemory(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().id == existing().id
+        && incoming().guestName == existing().guestName
+        && incoming().type == existing().type
+        && incoming().url == existing().url
+        && incoming().category == existing().category
+        && incoming().caption == existing().caption
+        // Action: heart/like increment
+        && incoming().diff(existing()).affectedKeys().hasOnly(['likes']);
+
+      allow delete: if false; // Only admin or system can delete memories
+    }
+
+    // GUESTBOOK SECURITY GATE
+    match /guestbook/{messageId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() 
+        && isValidId(messageId)
+        && isValidGuestbookMessage(incoming())
+        && incoming().createdAt == request.time;
+        
+      // Enable updates only for likes/hearts
+      allow update: if isSignedIn()
+        && isValidGuestbookMessage(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().id == existing().id
+        && incoming().name == existing().name
+        && incoming().text == existing().text
+        && (
+          (!existing().keys().hasAll(['voiceUrl']) && !incoming().keys().hasAll(['voiceUrl'])) ||
+          (existing().keys().hasAll(['voiceUrl']) && incoming().keys().hasAll(['voiceUrl']) && incoming().voiceUrl == existing().voiceUrl)
+        )
+        // Action: heart/like guestbook
+        && incoming().diff(existing()).affectedKeys().hasOnly(['likes']);
+
+      allow delete: if false; // Only admin or system can delete posts
+    }
+
+    // Entity validator function for Memory
+    function isValidMemory(m) {
+      return m.keys().hasAll(['id', 'type', 'url', 'category', 'caption', 'guestName', 'likes', 'createdAt'])
+        && m.keys().size() == 8
+        && m.id is string && m.id.size() <= 128
+        && m.type is string && (m.type == 'photo' || m.type == 'video')
+        && m.url is string && m.url.size() <= 6000000 // support base64 size limits (around 5.5MB max)
+        && m.category is string && (
+             m.category == 'Ceremony' || m.category == 'Reception' || 
+             m.category == 'Family' || m.category == 'Friends' || 
+             m.category == 'Dance Floor' || m.category == 'Special Moments'
+           )
+        && m.caption is string && m.caption.size() <= 500
+        && m.guestName is string && m.guestName.size() <= 100 && m.guestName.size() > 0
+        && m.likes is int && m.likes >= 0;
+    }
+
+    // Entity validator function for GuestbookMessage
+    function isValidGuestbookMessage(g) {
+      return g.keys().hasAll(['id', 'name', 'text', 'likes', 'createdAt'])
+        && (g.keys().size() == 5 || (g.keys().size() == 6 && g.keys().hasAll(['voiceUrl'])))
+        && g.id is string && g.id.size() <= 128
+        && g.name is string && g.name.size() <= 100 && g.name.size() > 0
+        && g.text is string && g.text.size() <= 1000
+        && (!g.keys().hasAll(['voiceUrl']) || (g.voiceUrl is string && g.voiceUrl.size() <= 6000000))
+        && g.likes is int && g.likes >= 0;
+    }
+  }
+}

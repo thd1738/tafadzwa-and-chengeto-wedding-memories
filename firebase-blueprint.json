@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "Memory": {
+      "title": "Wedding Memory",
+      "description": "A photo or video uploaded by a guest during the wedding.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["photo", "video"] },
+        "url": { "type": "string", "description": "Base64 or Cloud Storage URL of the photo or video" },
+        "category": { "type": "string", "enum": ["Ceremony", "Reception", "Family", "Friends", "Dance Floor", "Special Moments"] },
+        "caption": { "type": "string" },
+        "guestName": { "type": "string" },
+        "likes": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "url", "category", "caption", "guestName", "likes", "createdAt"]
+    },
+    "GuestbookMessage": {
+      "title": "Guestbook Message",
+      "description": "A heartfelt text or audio note left by a wedding guest.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "text": { "type": "string" },
+        "voiceUrl": { "type": "string", "description": "Optional base64 recording data string for voice notes" },
+        "likes": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "text", "likes", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/memories/{memoryId}": {
+      "schema": "Memory",
+      "description": "A high-fidelity photo or video uploaded for the wedding gallery, grouped under sections."
+    },
+    "/guestbook/{messageId}": {
+      "schema": "GuestbookMessage",
+      "description": "A guestbook wish combined with optional recordable vocals."
+    }
+  }
+}
