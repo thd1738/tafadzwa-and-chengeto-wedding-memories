@@ -1,67 +1,7 @@
 import { Memory, MemoryCategory, StoryMilestone, TimelineEvent } from './types';
+import firstMeetingImg from './assets/images/regenerated_image_1781096401635.png';
 
-export const INITIAL_MEMORIES: Memory[] = [
-  {
-    id: 'seed-1',
-    type: 'photo',
-    url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800',
-    category: MemoryCategory.CEREMONY,
-    caption: 'Tafadzwa and Chengeto during their beautiful vow exchange. Emotional moments!',
-    guestName: 'Aunt Chipo',
-    likes: 18,
-    createdAt: '2026-08-29T11:30:00Z'
-  },
-  {
-    id: 'seed-2',
-    type: 'photo',
-    url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800',
-    category: MemoryCategory.RECEPTION,
-    caption: 'The magnificent reception design at Blissful Barn Gardens. Truly premium!',
-    guestName: 'Wedding Planner',
-    likes: 24,
-    createdAt: '2026-08-29T14:15:00Z'
-  },
-  {
-    id: 'seed-3',
-    type: 'photo',
-    url: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80&w=800',
-    category: MemoryCategory.SPECIAL_MOMENTS,
-    caption: 'They look absolutely ethereal. Forever Tafadzwa and Chengeto.',
-    guestName: 'Farai (Best Man)',
-    likes: 42,
-    createdAt: '2026-08-29T13:45:00Z'
-  },
-  {
-    id: 'seed-4',
-    type: 'photo',
-    url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&q=80&w=800',
-    category: MemoryCategory.FRIENDS,
-    caption: 'The bridal crew looking incredibly sharp and champagne-gold unified!',
-    guestName: 'Sekai (Maid of Honor)',
-    likes: 31,
-    createdAt: '2026-08-29T13:20:00Z'
-  },
-  {
-    id: 'seed-5',
-    type: 'photo',
-    url: 'https://images.unsplash.com/photo-1519225495810-7512c322a3e6?auto=format&fit=crop&q=80&w=800',
-    category: MemoryCategory.DANCE_FLOOR,
-    caption: 'Chengeto showing off some incredible moves! The dance floor is electric!',
-    guestName: 'Cousin Simba',
-    likes: 35,
-    createdAt: '2026-08-29T20:30:00Z'
-  },
-  {
-    id: 'seed-6',
-    type: 'photo',
-    url: 'https://images.unsplash.com/photo-1507504038482-7621abf8c325?auto=format&fit=crop&q=80&w=800',
-    category: MemoryCategory.FAMILY,
-    caption: 'A truly beautiful moment with the parents holding hands during the speech.',
-    guestName: 'Gogo Dube',
-    likes: 29,
-    createdAt: '2026-08-29T15:10:00Z'
-  }
-];
+export const INITIAL_MEMORIES: Memory[] = [];
 
 export const STORY_MILESTONES: StoryMilestone[] = [
   {
@@ -69,7 +9,7 @@ export const STORY_MILESTONES: StoryMilestone[] = [
     date: 'August 2023',
     title: 'First Meeting',
     description: 'I first saw her on my sister\'s status, then we met face to face at AMH.',
-    imageUrl: '/src/assets/images/regenerated_image_1781091822839.jpg'
+    imageUrl: firstMeetingImg
   },
   {
     id: 'story-2',

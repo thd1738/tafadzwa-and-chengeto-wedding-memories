@@ -112,61 +112,80 @@ export default function App() {
           <motion.div
             key="splash-loader"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.8, ease: 'easeInOut' } }}
-            className="fixed inset-0 z-[100] bg-[#FFF9F2] flex flex-col items-center justify-center p-6 text-center"
+            exit={{ opacity: 0, transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] } }}
+            className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6 text-center"
           >
-            <div className="space-y-6 max-w-sm">
+            {/* Elegant Floating Particles Background in Splash */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+              <motion.div 
+                animate={{ y: [-15, 15, -15], x: [-10, 10, -10], opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute top-1/4 left-1/4 w-3 h-3 rounded-full bg-[#D4AF37] filter blur-[2px]"
+              />
+              <motion.div 
+                animate={{ y: [15, -15, 15], x: [10, -10, 10], opacity: [0.2, 0.6, 0.2] }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                className="absolute bottom-1/4 right-1/4 w-4 h-4 rounded-full bg-[#D4AF37] filter blur-[3px]"
+              />
+              <motion.div 
+                animate={{ y: [-20, 20, -20], x: [8, -8, 8], opacity: [0.15, 0.45, 0.15] }}
+                transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+                className="absolute top-1/3 right-1/3 w-2.5 h-2.5 rounded-full bg-[#D4AF37]/80 filter blur-[1px]"
+              />
+            </div>
+
+            <div className="space-y-8 max-w-sm relative z-10">
               {/* Gold Monogram Shield rings */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.75 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.2, ease: 'easeOut' }}
+                transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
                 className="relative h-28 w-28 mx-auto flex items-center justify-center"
               >
                 {/* Outlines */}
-                <div className="absolute inset-0 border border-[#D4AF37]/45 rounded-full animate-spin [animation-duration:15s]" />
-                <div className="absolute inset-1.5 border border-dashed border-[#D4AF37]/30 rounded-full animate-spin [animation-duration:22s] [animation-direction:reverse]" />
+                <div className="absolute inset-0 border border-[#D4AF37]/50 rounded-full animate-spin [animation-duration:18s]" />
+                <div className="absolute inset-1.5 border border-dashed border-[#D4AF37]/35 rounded-full animate-spin [animation-duration:25s] [animation-direction:reverse]" />
                 
                 {/* Center text initials */}
-                <span className="font-cursive text-5xl text-[#D4AF37] relative -top-0.5">T & C</span>
+                <span className="font-cursive text-5.5.xl text-[#D4AF37] relative -top-0.5 select-none">T & C</span>
               </motion.div>
 
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <motion.h4
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="font-serif text-[13px] tracking-[0.25em] uppercase text-[#D4AF37] font-medium"
+                  initial={{ opacity: 0, letterSpacing: '0.15em', y: 15 }}
+                  animate={{ opacity: 1, letterSpacing: '0.28em', y: 0 }}
+                  transition={{ duration: 1.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="font-serif text-[13px] uppercase text-[#D4AF37] font-semibold"
                 >
                   Tafadzwa & Chengeto
                 </motion.h4>
                 <motion.h2
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                  className="font-serif text-2xl text-gray-800 font-normal italic"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1.5, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="font-serif text-2.5xl text-gray-800 font-normal italic"
                 >
                   "Eternal Covenant"
                 </motion.h2>
               </div>
 
               {/* Loader Slider */}
-              <div className="w-40 h-[2px] bg-neutral-100 mx-auto rounded-full overflow-hidden relative">
+              <div className="w-44 h-[2px] bg-neutral-100 mx-auto rounded-full overflow-hidden relative">
                 <motion.div 
                   className="h-full gold-gradient-bg absolute left-0"
                   initial={{ width: 0 }}
                   animate={{ width: '100%' }}
-                  transition={{ duration: 2.3, ease: 'easeInOut' }}
+                  transition={{ duration: 2.5, ease: 'easeInOut' }}
                 />
               </div>
 
               <motion.p
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0.6 }}
-                transition={{ delay: 1.3 }}
-                className="text-[10px] uppercase tracking-widest font-sans font-medium text-gray-500"
+                animate={{ opacity: 0.5 }}
+                transition={{ delay: 1.4 }}
+                className="text-[10px] uppercase tracking-[0.2em] font-sans font-semibold text-gray-500"
               >
-                Loading Matrimonial Portal
+                Entering Matrimonial Portal
               </motion.p>
             </div>
           </motion.div>
@@ -282,12 +301,21 @@ export default function App() {
       >
         
         {/* Cinematic Backdrop Image + Soft romantic flow filters */}
-        <div className="absolute inset-0 z-0">
-          <img
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <motion.img
             src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1600"
             alt="Scenic Wedding Background"
             referrerPolicy="no-referrer"
-            className="w-full h-full object-cover opacity-15 filter scale-105 pointer-events-none"
+            animate={{ 
+              scale: [1.02, 1.08, 1.02],
+              y: [-10, 10, -10]
+            }}
+            transition={{ 
+              duration: 25, 
+              ease: "linear", 
+              repeat: Infinity,
+            }}
+            className="w-full h-full object-cover opacity-15 filter pointer-events-none"
           />
           {/* Floating light particles (CSS based spark background) */}
           <div className="floating-sparkle-bg" />
@@ -298,27 +326,27 @@ export default function App() {
           
           <div className="space-y-2">
             <motion.span
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 0.8, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-xs font-semibold tracking-[0.3em] uppercase text-[#D4AF37] block font-sans"
+              initial={{ opacity: 0, y: -15, letterSpacing: '0.15em' }}
+              animate={{ opacity: 0.85, y: 0, letterSpacing: '0.3em' }}
+              transition={{ delay: 0.3, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+              className="text-xs font-semibold uppercase text-[#D4AF37] block font-sans"
             >
               Matrimonial Celebration
             </motion.span>
             
             <motion.h1
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4, duration: 1.2, ease: 'easeOut' }}
+              initial={{ opacity: 0, y: 30, letterSpacing: '-0.02em' }}
+              animate={{ opacity: 1, y: 0, letterSpacing: '0.01em' }}
+              transition={{ delay: 0.5, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
               className="font-cursive text-6xl sm:text-7xl md:text-8xl text-gray-800 leading-none drop-shadow-sm font-black"
             >
               Tafadzwa & Chengeto
             </motion.h1>
 
             <motion.h3
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.85 }}
-              transition={{ delay: 0.7 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 0.85, y: 0 }}
+              transition={{ delay: 0.8, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
               className="font-sans text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-[#D4AF37]"
             >
               Together Forever
@@ -331,7 +359,7 @@ export default function App() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
+            transition={{ delay: 1.0, duration: 1.0 }}
             className="space-y-1.5"
           >
             <p className="font-serif text-lg md:text-2xl text-gray-700 italic font-medium">
@@ -345,94 +373,118 @@ export default function App() {
 
           {/* MATRIMONIAL COUNTDOWN CLOCK TIMER */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.8 }}
+            transition={{ delay: 1.2, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
             className="flex items-center justify-center gap-3 md:gap-5 pt-2"
           >
             {/* Days block */}
-            <div className="glass-panel rounded-xl px-3 py-2.5 md:p-4 min-w-[70px] md:min-w-[85px] border border-[#D4AF37]/25 shadow-md">
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="glass-panel rounded-xl px-3 py-2.5 md:p-4 min-w-[70px] md:min-w-[85px] border border-[#D4AF37]/25 shadow-md"
+            >
               <span className="block font-serif text-2xl md:text-3.5xl font-bold text-[#2B2B2B]">
                 {countdown.days}
               </span>
               <span className="block text-[8px] md:text-[10px] tracking-widest uppercase font-semibold text-gray-400 mt-1">
                 Days
               </span>
-            </div>
+            </motion.div>
 
             {/* Hours block */}
-            <div className="glass-panel rounded-xl px-3 py-2.5 md:p-4 min-w-[70px] md:min-w-[85px] border border-[#D4AF37]/25 shadow-md">
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="glass-panel rounded-xl px-3 py-2.5 md:p-4 min-w-[70px] md:min-w-[85px] border border-[#D4AF37]/25 shadow-md"
+            >
               <span className="block font-serif text-2xl md:text-3.5xl font-bold text-[#2B2B2B]">
                 {countdown.hours}
               </span>
               <span className="block text-[8px] md:text-[10px] tracking-widest uppercase font-semibold text-gray-400 mt-1">
                 Hours
               </span>
-            </div>
+            </motion.div>
 
             {/* Mins block */}
-            <div className="glass-panel rounded-xl px-3 py-2.5 md:p-4 min-w-[70px] md:min-w-[85px] border border-[#D4AF37]/25 shadow-md">
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="glass-panel rounded-xl px-3 py-2.5 md:p-4 min-w-[70px] md:min-w-[85px] border border-[#D4AF37]/25 shadow-md"
+            >
               <span className="block font-serif text-2xl md:text-3.5xl font-bold text-[#2B2B2B]">
                 {countdown.minutes}
               </span>
               <span className="block text-[8px] md:text-[10px] tracking-widest uppercase font-semibold text-gray-400 mt-1">
                 Min
               </span>
-            </div>
+            </motion.div>
 
             {/* Secs block */}
-            <div className="glass-panel rounded-xl px-3 py-2.5 md:p-4 min-w-[70px] md:min-w-[85px] border border-[#D4AF37]/25 shadow-md bg-white">
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="glass-panel rounded-xl px-3 py-2.5 md:p-4 min-w-[70px] md:min-w-[85px] border border-[#D4AF37]/25 shadow-md bg-white"
+            >
               <span className="block font-serif text-2xl md:text-3.5xl font-bold text-[#D4AF37] animate-pulse">
                 {countdown.seconds}
               </span>
               <span className="block text-[8px] md:text-[10px] tracking-widest uppercase font-semibold text-gray-400 mt-1">
                 Sec
               </span>
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Quick Action Navigation Buttons (with soft glass filters, large hitboxes and anchors) */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.3, duration: 0.8 }}
+            transition={{ delay: 1.4, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
             className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-6 max-w-2xl mx-auto"
           >
             {/* Upload Photos button */}
-            <button
+            <motion.button
               onClick={triggerPhotoUpload}
-              className="glass-panel hover:bg-[#FFF9F2] px-4 py-3.5 rounded-xl border border-double border-[#D4AF37]/40 shadow-md flex flex-col items-center justify-center gap-1.5 transition-all text-[#2B2B2B] hover:text-[#D4AF37] pointer-events-auto "
+              whileHover={{ scale: 1.05, y: -2, border: '1px solid rgba(212, 175, 55, 0.6)' }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 450, damping: 25 }}
+              className="glass-panel hover:bg-[#FFF9F2] px-4 py-3.5 rounded-xl border border-double border-[#D4AF37]/40 shadow-md flex flex-col items-center justify-center gap-1.5 text-[#2B2B2B] hover:text-[#D4AF37] pointer-events-auto cursor-pointer"
             >
               <ImageIcon className="h-5 w-5 text-[#D4AF37]" />
               <span className="text-[10px] tracking-wider uppercase font-bold font-sans">Upload Photos</span>
-            </button>
+            </motion.button>
 
             {/* Upload Videos button */}
-            <button
+            <motion.button
               onClick={triggerVideoUpload}
-              className="glass-panel hover:bg-[#FFF9F2] px-4 py-3.5 rounded-xl border border-double border-[#D4AF37]/40 shadow-md flex flex-col items-center justify-center gap-1.5 transition-all text-[#2B2B2B] hover:text-[#D4AF37] pointer-events-auto "
+              whileHover={{ scale: 1.05, y: -2, border: '1px solid rgba(212, 175, 55, 0.6)' }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 450, damping: 25 }}
+              className="glass-panel hover:bg-[#FFF9F2] px-4 py-3.5 rounded-xl border border-double border-[#D4AF37]/40 shadow-md flex flex-col items-center justify-center gap-1.5 text-[#2B2B2B] hover:text-[#D4AF37] pointer-events-auto cursor-pointer"
             >
               <Video className="h-5 w-5 text-[#D4AF37]" />
               <span className="text-[10px] tracking-wider uppercase font-bold font-sans">Upload Videos</span>
-            </button>
+            </motion.button>
 
             {/* View Memories slide triggers */}
-            <button
+            <motion.button
               onClick={() => scrollToId('gallery-section')}
-              className="glass-panel hover:bg-[#FFF9F2] px-4 py-3.5 rounded-xl border border-double border-[#D4AF37]/40 shadow-md flex flex-col items-center justify-center gap-1.5 transition-all text-[#2B2B2B] hover:text-[#D4AF37] pointer-events-auto"
+              whileHover={{ scale: 1.05, y: -2, border: '1px solid rgba(212, 175, 55, 0.6)' }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 450, damping: 25 }}
+              className="glass-panel hover:bg-[#FFF9F2] px-4 py-3.5 rounded-xl border border-double border-[#D4AF37]/40 shadow-md flex flex-col items-center justify-center gap-1.5 text-[#2B2B2B] hover:text-[#D4AF37] pointer-events-auto cursor-pointer"
             >
               <Heart className="h-5 w-5 text-[#D4AF37]" />
               <span className="text-[10px] tracking-wider uppercase font-bold font-sans">View Memories</span>
-            </button>
+            </motion.button>
 
             {/* Leave a message triggers */}
-            <button
+            <motion.button
               onClick={() => scrollToId('guestbook-section')}
-              className="glass-panel hover:bg-[#FFF9F2] px-4 py-3.5 rounded-xl border border-double border-[#D4AF37]/40 shadow-md flex flex-col items-center justify-center gap-1.5 transition-all text-[#2B2B2B] hover:text-[#D4AF37] pointer-events-auto"
+              whileHover={{ scale: 1.05, y: -2, border: '1px solid rgba(212, 175, 55, 0.6)' }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 450, damping: 25 }}
+              className="glass-panel hover:bg-[#FFF9F2] px-4 py-3.5 rounded-xl border border-double border-[#D4AF37]/40 shadow-md flex flex-col items-center justify-center gap-1.5 text-[#2B2B2B] hover:text-[#D4AF37] pointer-events-auto cursor-pointer"
             >
               <MessageSquare className="h-5 w-5 text-[#D4AF37]" />
               <span className="text-[10px] tracking-wider uppercase font-bold font-sans">Leave Message</span>
-            </button>
+            </motion.button>
           </motion.div>
 
         </div>
@@ -452,7 +504,7 @@ export default function App() {
       </section>
 
       {/* 2. REAL-TIME MULTI-USER PHOTO & VIDEO GALLERY */}
-      <GallerySection />
+      <GallerySection onUploadTrigger={triggerPhotoUpload} />
 
       {/* 3. PRINTABLE TABLE QR CODE FLIER CARD */}
       <QRSection />
@@ -462,6 +514,40 @@ export default function App() {
 
       {/* 5. GUESTBOOK NOTE GREETINGS & VOICE MESSAGING WALL */}
       <GuestbookSection />
+
+      {/* FINAL EMOTIONAL MOMENT */}
+      <section className="py-24 bg-[#FFF9F2] relative overflow-hidden flex flex-col items-center justify-center text-center px-4">
+        {/* Abstract Gold Bokeh particles */}
+        <div className="absolute inset-0 pointer-events-none opacity-40">
+          <div className="absolute top-1/4 left-1/3 w-2.5 h-2.5 bg-[#D4AF37] rounded-full filter blur-[1px] animate-pulse" />
+          <div className="absolute bottom-1/3 right-1/4 w-2 h-2 bg-[#D4AF37] rounded-full filter blur-[1px] animate-pulse" />
+          <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-[#D4AF37] rounded-full filter blur-[1px] animate-pulse" />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-2xl space-y-6 relative z-10"
+        >
+          <div className="h-0.5 w-12 bg-[#D4AF37]/45 mx-auto" />
+          
+          <h2 className="font-serif text-2xl sm:text-3.5xl italic font-normal text-[#2B2B2B]/90 tracking-wide leading-relaxed">
+            "Every photo tells a story.<br/>Every memory lasts forever."
+          </h2>
+
+          <div className="flex justify-center items-center gap-3">
+            <span className="h-[1px] w-6 bg-[#D4AF37]/35" />
+            <span className="font-sans text-[10px] tracking-[0.25em] uppercase text-[#D4AF37] font-bold">
+              Tafadzwa & Chengeto
+            </span>
+            <span className="h-[1px] w-6 bg-[#D4AF37]/35" />
+          </div>
+          
+          <div className="h-0.5 w-12 bg-[#D4AF37]/45 mx-auto" />
+        </motion.div>
+      </section>
 
       {/* FOOTER CREDENTIALS */}
       <footer className="py-12 bg-[#2B2B2B] border-t border-neutral-800 text-center text-white/50 px-4">

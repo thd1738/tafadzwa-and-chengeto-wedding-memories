@@ -61,26 +61,6 @@ export default function GuestbookSection() {
           list.push({ id: d.id, ...d.data() } as GuestbookMessage);
         });
         
-        // If snapshot is empty, let's keep some preinstalled congratulations notes
-        if (list.length === 0) {
-          list.push(
-            {
-              id: 'g-seed-1',
-              name: 'Dr. John & Margaret',
-              text: 'A gorgeous wedding for local legends! Tafadzwa & Chengeto, may your home overflow with tranquility, rich loyalty, and laughter from Harare to the ends of the world.',
-              likes: 12,
-              createdAt: '2026-06-10T10:00:00Z'
-            },
-            {
-              id: 'g-seed-2',
-              name: 'Simbashe (Chinhoyi)',
-              text: 'Words cannot outline our joy! The layout of the venue looks so premium, and seeing the two of you covenant is the highlight of 2026. Forever Together! God bless.',
-              likes: 8,
-              createdAt: '2026-06-10T09:45:00Z'
-            }
-          );
-        }
-
         list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         setMessages(list);
       },
@@ -88,24 +68,6 @@ export default function GuestbookSection() {
         console.warn("Guestbook sub block error: using local fallbacks", error);
         
         const fallback = [...localList];
-        if (fallback.length === 0) {
-          fallback.push(
-            {
-              id: 'g-seed-1',
-              name: 'Dr. John & Margaret',
-              text: 'A gorgeous wedding for local legends! Tafadzwa & Chengeto, may your home overflow with tranquility, rich loyalty, and laughter from Harare to the ends of the world.',
-              likes: 12,
-              createdAt: '2026-06-10T10:00:00Z'
-            },
-            {
-              id: 'g-seed-2',
-              name: 'Simbashe (Chinhoyi)',
-              text: 'Words cannot outline our joy! The layout of the venue looks so premium, and seeing the two of you covenant is the highlight of 2026. Forever Together! God bless.',
-              likes: 8,
-              createdAt: '2026-06-10T09:45:00Z'
-            }
-          );
-        }
         fallback.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         setMessages(fallback);
 
@@ -408,91 +370,157 @@ export default function GuestbookSection() {
           </div>
 
           {/* Cards columns stream viewer */}
-          <div className="lg:col-span-3 space-y-4 max-h-[620px] overflow-y-auto pr-2 scrollbar-thin">
-            <AnimatePresence initial={false}>
-              {messages.map((msg) => {
-                const isLiked = likedMsgs.includes(msg.id);
-                return (
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-white p-5 md:p-6 rounded-2xl border border-[#E8DDD0] shadow-sm relative group hover:shadow-md transition-shadow"
-                  >
-                    {/* Timestamp relative badges */}
-                    <span className="absolute top-4 right-4 text-[9px] text-[#2B2B2B]/40 font-mono">
-                      {new Date(msg.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          <div className="lg:col-span-3">
+            {messages.length === 0 ? (
+              <div className="bg-white/75 backdrop-blur-md rounded-2xl border border-[#E8DDD0] p-8 md:p-10 text-center shadow-lg relative overflow-hidden flex flex-col justify-center items-center min-h-[440px] space-y-6">
+                {/* Floating gold background light glow */}
+                <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-[#D4AF37]/5 filter blur-2xl pointer-events-none" />
+                
+                <div className="space-y-4 max-w-sm mx-auto flex flex-col items-center">
+                  {/* Luxury handwritten note / envelope icon */}
+                  <div className="inline-flex h-14 w-14 rounded-full bg-[#FFF9F2] border border-[#D4AF37]/35 items-center justify-center text-[#D4AF37] shadow-sm animate-pulse mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail-open">
+                      <path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z"/>
+                      <path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10"/>
+                    </svg>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-[10px] tracking-[0.25em] uppercase font-sans font-bold text-[#D4AF37] block">
+                      Couples Guestbook
                     </span>
+                    <h3 className="font-serif text-xl md:text-2xl text-[#2B2B2B] leading-tight font-medium">
+                      No messages have been shared yet
+                    </h3>
+                    <p className="text-xs text-[#2B2B2B]/60 leading-relaxed font-sans max-w-xs mx-auto">
+                      Leave your wishes, blessings, and memories for Tafadzwa & Chengeto. Your message will appear here instantly for everyone to enjoy.
+                    </p>
+                  </div>
+                </div>
 
-                    <div className="flex items-start gap-4">
-                      
-                      {/* Guest avatar sphere */}
-                      <div className="h-10 w-10 shrink-0 rounded-full bg-[#FFFAF2] border border-[#E8DDD0] flex items-center justify-center text-[#D4AF37]">
-                        <User className="h-4 w-4" />
-                      </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xs pt-2">
+                  <button
+                    onClick={() => {
+                      const nameInput = document.querySelector('input[placeholder="e.g. Tendai and Chidza"]') as HTMLInputElement;
+                      if (nameInput) {
+                        nameInput.focus();
+                        nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }
+                    }}
+                    className="w-full bg-[#2B2B2B] hover:bg-[#D4AF37] hover:text-[#2B2B2B] text-white py-3 px-4 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-sm flex items-center justify-center gap-1.5 cursor-pointer pointer-events-auto"
+                  >
+                    <span>Write First Message</span>
+                  </button>
 
-                      <div className="space-y-2.5 w-full">
-                        <h4 className="font-serif font-medium text-[#2B2B2B] text-base leading-none">
-                          {msg.name}
-                        </h4>
+                  <button
+                    onClick={() => {
+                      startRecording();
+                    }}
+                    className="w-full bg-[#FFF9F2] hover:bg-white text-[#2B2B2B] hover:text-[#D4AF37] border border-[#D4AF37]/30 py-3 px-4 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-xs flex items-center justify-center gap-1.5 cursor-pointer pointer-events-auto"
+                  >
+                    <Mic className="h-3.5 w-3.5 text-[#D4AF37]" />
+                    <span>Record Voice Note</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4 max-h-[620px] overflow-y-auto pr-2 scrollbar-thin">
+                <AnimatePresence initial={false}>
+                  {messages.map((msg, idx) => {
+                    const isLiked = likedMsgs.includes(msg.id);
+                    // Generate a subtle random pseudo-rotation based on the index to mimic beautifully placed paper notes
+                    const rotateVal = idx % 2 === 0 ? (idx * 0.7) % 1.5 : -((idx * 0.9) % 1.5);
+                    return (
+                      <motion.div
+                        key={msg.id}
+                        initial={{ opacity: 0, scale: 0.94, y: 30, rotate: rotateVal }}
+                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        exit={{ opacity: 0, scale: 0.92 }}
+                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: Math.min(idx * 0.05, 0.25) }}
+                        whileHover={{ 
+                          y: -4, 
+                          rotate: rotateVal * 0.4, 
+                          boxShadow: '0 10px 20px -5px rgba(0, 0, 0, 0.08)',
+                          transition: { duration: 0.25, ease: 'easeOut' }
+                        }}
+                        className="bg-white p-5 md:p-6 rounded-2xl border border-[#E8DDD0] shadow-sm relative group pointer-events-auto"
+                      >
+                        {/* Timestamp relative badges */}
+                        <span className="absolute top-4 right-4 text-[9px] text-[#2B2B2B]/40 font-mono">
+                          {new Date(msg.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </span>
 
-                        <p className="text-sm text-[#2B2B2B]/75 leading-relaxed font-sans italic">
-                          "{msg.text}"
-                        </p>
-
-                        {/* RENDER VOICE NOTE PLAYBACK IF AVAILABLE */}
-                        {msg.voiceUrl && (
-                          <div className="pt-2">
-                            <button
-                              onClick={() => playVoice(msg.id, msg.voiceUrl!)}
-                              className="flex items-center gap-3 px-4 py-2 rounded-xl bg-[#FFF9F2] hover:bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-xs font-sans text-[#2B2B2B] transition-all pointer-events-auto shadow-sm"
-                            >
-                              {playingVoiceId === msg.id ? (
-                                <>
-                                  <Pause className="h-4.5 w-4.5 text-[#D4AF37] fill-[#D4AF37]" />
-                                  <span className="font-semibold text-[#D4AF37]">Playing Audio Wish...</span>
-                                  {/* Waves */}
-                                  <div className="flex items-end gap-0.5 h-3">
-                                    <span className="w-0.5 bg-[#D4AF37] h-1.5 animate-[soundWave_0.6s_infinite_alternate]" />
-                                    <span className="w-0.5 bg-[#D4AF37] h-3 animate-[soundWave_0.4s_infinite_alternate_0.15s]" />
-                                    <span className="w-0.5 bg-[#D4AF37] h-2 animate-[soundWave_0.5s_infinite_alternate_0.1s]" />
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <Play className="h-4.5 w-4.5 text-[#D4AF37] fill-[#D4AF37] ml-0.5" />
-                                  <span>Listen to Voice Greetings</span>
-                                </>
-                              )}
-                            </button>
+                        <div className="flex items-start gap-4">
+                          
+                          {/* Guest avatar sphere */}
+                          <div className="h-10 w-10 shrink-0 rounded-full bg-[#FFFAF2] border border-[#E8DDD0] flex items-center justify-center text-[#D4AF37]">
+                            <User className="h-4 w-4" />
                           </div>
-                        )}
 
-                        {/* Interactive heart react triggers */}
-                        <div className="flex items-center justify-between border-t border-neutral-50 pt-3 mt-4">
-                          <button
-                            onClick={() => handleLikeMessage(msg.id)}
-                            className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors text-[11px] font-sans pointer-events-auto ${
-                              isLiked 
-                                ? 'bg-rose-50 text-rose-600 border border-rose-100 font-medium' 
-                                : 'text-gray-400 hover:text-rose-600 hover:bg-rose-50/50'
-                            }`}
-                          >
-                            <Heart className={`h-3.5 w-3.5 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
-                            <span>{msg.likes} Hearts</span>
-                          </button>
+                          <div className="space-y-2.5 w-full">
+                            <h4 className="font-serif font-medium text-[#2B2B2B] text-base leading-none">
+                              {msg.name}
+                            </h4>
 
-                          <span className="text-[9px] text-[#D4AF37] tracking-widest font-sans uppercase font-medium">
-                            Wedding Card
-                          </span>
+                            <p className="text-sm text-[#2B2B2B]/75 leading-relaxed font-sans italic">
+                              "{msg.text}"
+                            </p>
+
+                            {/* RENDER VOICE NOTE PLAYBACK IF AVAILABLE */}
+                            {msg.voiceUrl && (
+                              <div className="pt-2">
+                                <button
+                                  onClick={() => playVoice(msg.id, msg.voiceUrl!)}
+                                  className="flex items-center gap-3 px-4 py-2 rounded-xl bg-[#FFF9F2] hover:bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-xs font-sans text-[#2B2B2B] transition-all pointer-events-auto shadow-sm cursor-pointer"
+                                >
+                                  {playingVoiceId === msg.id ? (
+                                    <>
+                                      <Pause className="h-4.5 w-4.5 text-[#D4AF37] fill-[#D4AF37]" />
+                                      <span className="font-semibold text-[#D4AF37]">Playing Audio Wish...</span>
+                                      {/* Waves */}
+                                      <div className="flex items-end gap-0.5 h-3">
+                                        <span className="w-0.5 bg-[#D4AF37] h-1.5 animate-[soundWave_0.6s_infinite_alternate]" />
+                                        <span className="w-0.5 bg-[#D4AF37] h-3 animate-[soundWave_0.4s_infinite_alternate_0.15s]" />
+                                        <span className="w-0.5 bg-[#D4AF37] h-2 animate-[soundWave_0.5s_infinite_alternate_0.1s]" />
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Play className="h-4.5 w-4.5 text-[#D4AF37] fill-[#D4AF37] ml-0.5" />
+                                      <span>Listen to Voice Greetings</span>
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                            )}
+
+                            {/* Interactive heart react triggers */}
+                            <div className="flex items-center justify-between border-t border-neutral-50 pt-3 mt-4">
+                              <button
+                                onClick={() => handleLikeMessage(msg.id)}
+                                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-colors text-[11px] font-sans pointer-events-auto cursor-pointer ${
+                                  isLiked 
+                                    ? 'bg-rose-50 text-rose-600 border border-rose-100 font-medium' 
+                                    : 'text-gray-400 hover:text-rose-600 hover:bg-rose-50/50'
+                                }`}
+                              >
+                                <Heart className={`h-3.5 w-3.5 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
+                                <span>{msg.likes} Hearts</span>
+                              </button>
+
+                              <span className="text-[9px] text-[#D4AF37] tracking-widest font-sans uppercase font-medium select-none">
+                                Wedding Card
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
 
         </div>

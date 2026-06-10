@@ -4,10 +4,14 @@ import { collection, onSnapshot, query, orderBy, doc, updateDoc, increment } fro
 import { Memory, MemoryCategory } from '../types';
 import { INITIAL_MEMORIES } from '../data';
 import { compressImage, formatWeddingDate } from '../utils/compressor';
-import { Heart, Search, Eye, Download, X, Calendar, User, SlidersHorizontal, Image as ImageIcon } from 'lucide-react';
+import { Heart, Search, Eye, Download, X, Calendar, User, SlidersHorizontal, Image as ImageIcon, Sparkles, Camera, Music, Wine } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function GallerySection() {
+interface GallerySectionProps {
+  onUploadTrigger: () => void;
+}
+
+export default function GallerySection({ onUploadTrigger }: GallerySectionProps) {
   const [memories, setMemories] = useState<Memory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
@@ -158,53 +162,206 @@ export default function GallerySection() {
           </p>
         </div>
 
-        {/* Toolbar: Category filter + instant search box info */}
-        <div className="flex flex-col gap-6 mb-10">
-          
-          {/* Scrollable Categories List (Mobile touch-friendly) */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none px-2 mask-linear">
-            <SlidersHorizontal className="h-4 w-4 text-[#D4AF37] shrink-0 mr-1" />
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => {
-                  setSelectedCategory(cat);
-                  setSelectedMemory(null);
+        {/* Conditional Toolbar rendering - only shown when there's actual content */}
+        {memories.length > 0 && (
+          <div className="flex flex-col gap-6 mb-10">
+            {/* Scrollable Categories List (Mobile touch-friendly) */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none px-2 mask-linear">
+              <SlidersHorizontal className="h-4 w-4 text-[#D4AF37] shrink-0 mr-1" />
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                    setSelectedMemory(null);
+                  }}
+                  className={`px-4 py-2 rounded-full text-xs font-medium tracking-wider uppercase whitespace-nowrap transition-all duration-300 pointer-events-auto shadow-sm ${
+                    selectedCategory === cat
+                      ? 'bg-[#2B2B2B] text-[#FFF9F2] shadow-md border border-[#2B2B2B]'
+                      : 'bg-white text-[#2B2B2B]/75 hover:text-[#D4AF37] border border-[#E8DDD0]'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Luxury Search Bar */}
+            <div className="relative max-w-md w-full mx-auto">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#D4AF37]" />
+              <input
+                type="text"
+                placeholder="Search uploads by guest name or caption..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-11 pr-4 py-3 rounded-full bg-white border border-[#E8DDD0] text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all bg-[#FFF9F2]/30 text-[#2B2B2B]"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Gallery Content or Premium Empty State Grid */}
+        {memories.length === 0 ? (
+          /* PREMIUM VISUALLY RICH EMPTY STATE */
+          <div className="grid md:grid-cols-12 gap-8 items-center max-w-5xl mx-auto mt-6">
+            
+            {/* Left Box: Elegant invitation, clean camera icon, and primary upload call-to-action button */}
+            <div className="md:col-span-6 bg-white/75 backdrop-blur-md rounded-3xl border border-[#E8DDD0] p-8 md:p-10 text-center md:text-left shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[420px]">
+              {/* Gold background radial light glow */}
+              <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-[#D4AF37]/5 filter blur-3xl pointer-events-none" />
+              
+              <div className="space-y-6 relative z-10">
+                <div className="inline-flex h-14 w-14 rounded-full bg-[#FFF9F2] border border-[#D4AF37]/35 items-center justify-center text-[#D4AF37] shadow-sm animate-pulse">
+                  <Camera className="h-6 w-6" />
+                </div>
+                
+                <div className="space-y-4">
+                  <span className="text-[10px] tracking-[0.25em] uppercase font-sans font-bold text-[#D4AF37] block">
+                    Awaiting First Memory
+                  </span>
+                  <h3 className="font-serif text-2xl md:text-3.5xl text-[#2B2B2B] leading-tight font-medium">
+                    Be the first to share a special moment
+                  </h3>
+                  <p className="text-xs md:text-sm text-[#2B2B2B]/60 leading-relaxed font-sans mt-2">
+                    Every smile, tear, and dance step tells a part of Tafadzwa & Chengeto's story. Upload your photos and short videos to instantly broadcast them on the live collective wall during the celebration.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="pt-8 relative z-10">
+                <button
+                  onClick={onUploadTrigger}
+                  className="w-full bg-[#2B2B2B] hover:bg-[#D4AF37] hover:text-[#2B2B2B] text-white py-4 px-8 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-3 cursor-pointer pointer-events-auto group"
+                >
+                  <Sparkles className="h-4 w-4 text-[#D4AF37] group-hover:text-[#2B2B2B] transition-colors" />
+                  <span>Upload First Memory</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Right Box: "Coming Alive Soon" animation containing romantic transparent placeholder frames */}
+            <div className="md:col-span-6 grid grid-cols-2 gap-4 relative">
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F8F5F0] to-transparent z-10 pointer-events-none" />
+              
+              {/* Frame I: Ceremony Placeholder */}
+              <motion.div
+                initial={{ opacity: 0.3, y: 10 }}
+                animate={{ 
+                  opacity: [0.35, 0.7, 0.35],
+                  y: [0, -6, 0]
                 }}
-                className={`px-4 py-2 rounded-full text-xs font-medium tracking-wider uppercase whitespace-nowrap transition-all duration-300 pointer-events-auto shadow-sm ${
-                  selectedCategory === cat
-                    ? 'bg-[#2B2B2B] text-[#FFF9F2] shadow-md border border-[#2B2B2B]'
-                    : 'bg-white text-[#2B2B2B]/75 hover:text-[#D4AF37] border border-[#E8DDD0]'
-                }`}
+                transition={{ 
+                  opacity: { repeat: Infinity, duration: 4, ease: "easeInOut" },
+                  y: { repeat: Infinity, duration: 5.5, ease: "easeInOut" }
+                }}
+                className="aspect-[3/4] rounded-2xl border border-dashed border-[#D4AF37]/40 bg-white/50 p-4 flex flex-col justify-between shadow-xs"
               >
-                {cat}
-              </button>
-            ))}
-          </div>
+                <div className="flex justify-between items-center text-[9px] uppercase tracking-widest font-sans font-semibold text-[#D4AF37]/75">
+                  <span>Frame I</span>
+                  <Sparkles className="h-3 w-3" />
+                </div>
+                <div className="text-center space-y-2 py-4">
+                  <div className="h-9 w-9 mx-auto rounded-full bg-[#FFF9F2] flex items-center justify-center text-[#D4AF37]/50 border border-[#D4AF37]/20">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                  <p className="font-serif text-[11px] italic text-[#2B2B2B]/40">Coming Alive Soon</p>
+                </div>
+                <div className="text-[8px] tracking-wider uppercase font-sans font-bold text-[#2B2B2B]/60 text-center">
+                  Vow Exchange Ceremony
+                </div>
+              </motion.div>
 
-          {/* Luxury Search Bar */}
-          <div className="relative max-w-md w-full mx-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#D4AF37]" />
-            <input
-              type="text"
-              placeholder="Search uploads by guest name or caption..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-full bg-white border border-[#E8DDD0] text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37] transition-all bg-[#FFF9F2]/30 text-[#2B2B2B]"
-            />
-          </div>
-        </div>
+              {/* Frame II: Reception Placeholder */}
+              <motion.div
+                initial={{ opacity: 0.2, y: -5 }}
+                animate={{ 
+                  opacity: [0.25, 0.6, 0.25],
+                  y: [-2, 4, -2]
+                }}
+                transition={{ 
+                  opacity: { repeat: Infinity, duration: 4.8, ease: "easeInOut", delay: 0.6 },
+                  y: { repeat: Infinity, duration: 6.5, ease: "easeInOut", delay: 0.6 }
+                }}
+                className="aspect-[4/3] rounded-2xl border border-dashed border-[#D4AF37]/40 bg-white/50 p-4 flex flex-col justify-between shadow-xs self-center"
+              >
+                <div className="flex justify-between items-center text-[9px] uppercase tracking-widest font-sans font-semibold text-[#D4AF37]/75">
+                  <span>Frame II</span>
+                  <Camera className="h-3 w-3" />
+                </div>
+                <div className="text-center py-2">
+                  <p className="font-serif text-[11px] italic text-[#2B2B2B]/40">Awaiting your captures</p>
+                </div>
+                <div className="text-[8px] tracking-wider uppercase font-sans font-bold text-[#2B2B2B]/60 text-center">
+                  Reception Grandeur
+                </div>
+              </motion.div>
 
-        {/* Masonry Columns Representation */}
-        {filteredMemories.length === 0 ? (
-          <div className="text-center py-20 bg-white/70 rounded-2xl border border-[#E8DDD0] max-w-md mx-auto shadow-lg">
-            <ImageIcon className="h-10 w-10 text-[#D4AF37]/50 mx-auto mb-4" />
-            <p className="text-sm font-medium text-[#2B2B2B]/80 font-sans">No memories uploaded here yet.</p>
+              {/* Frame III: Celebration/Dance Floor Placeholder */}
+              <motion.div
+                initial={{ opacity: 0.25, y: -10 }}
+                animate={{ 
+                  opacity: [0.3, 0.65, 0.3],
+                  y: [4, -4, 4]
+                }}
+                transition={{ 
+                  opacity: { repeat: Infinity, duration: 5.2, ease: "easeInOut", delay: 1.2 },
+                  y: { repeat: Infinity, duration: 7, ease: "easeInOut", delay: 1.2 }
+                }}
+                className="aspect-[3/4] rounded-2xl border border-dashed border-[#D4AF37]/30 bg-white/40 p-4 flex flex-col justify-between shadow-xs"
+              >
+                <div className="flex justify-between items-center text-[9px] uppercase tracking-widest font-sans font-semibold text-[#D4AF37]/75">
+                  <span>Frame III</span>
+                  <Music className="h-3 w-3" />
+                </div>
+                <div className="text-center space-y-2 py-4">
+                  <div className="h-9 w-9 mx-auto rounded-full bg-[#FFF9F2] flex items-center justify-center text-[#D4AF37]/50 border border-[#D4AF37]/25">
+                    <Heart className="h-3.5 w-3.5" />
+                  </div>
+                  <p className="font-serif text-[11px] italic text-[#2B2B2B]/40">Ready to sync live</p>
+                </div>
+                <div className="text-[8px] tracking-wider uppercase font-sans font-bold text-[#2B2B2B]/60 text-center">
+                  Electric Dance Floor
+                </div>
+              </motion.div>
+
+              {/* Frame IV: Banquet & Toasts Placeholder */}
+              <motion.div
+                initial={{ opacity: 0.35, y: 15 }}
+                animate={{ 
+                  opacity: [0.4, 0.75, 0.4],
+                  y: [0, 6, 0]
+                }}
+                transition={{ 
+                  opacity: { repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 1.8 },
+                  y: { repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1.8 }
+                }}
+                className="aspect-[4/5] rounded-2xl border border-dashed border-[#D4AF37]/45 bg-white/55 p-4 flex flex-col justify-between shadow-xs mt-4"
+              >
+                <div className="flex justify-between items-center text-[9px] uppercase tracking-widest font-sans font-semibold text-[#D4AF37]/75">
+                  <span>Frame IV</span>
+                  <Wine className="h-3.5 w-3.5" />
+                </div>
+                <div className="text-center py-6">
+                  <p className="font-serif text-[11px] italic text-[#2B2B2B]/40">Capture the toasts</p>
+                </div>
+                <div className="text-[8px] tracking-wider uppercase font-sans font-bold text-[#2B2B2B]/60 text-center">
+                  Gourmet Banquet Feasts
+                </div>
+              </motion.div>
+
+            </div>
+          </div>
+        ) : filteredMemories.length === 0 ? (
+          /* FILTER RESULTS EMPTY STATE (SOME REAL DATA EXISTS BUT IS FILTERED OUT) */
+          <div className="text-center py-20 bg-white/70 rounded-2xl border border-[#E8DDD0] max-w-sm mx-auto shadow-md">
+            <Search className="h-10 w-10 text-[#D4AF37]/50 mx-auto mb-4" />
+            <p className="text-sm font-medium text-[#2B2B2B]/80 font-sans">No matching records found</p>
             <p className="text-xs text-[#2B2B2B]/50 max-w-xs mx-auto mt-2 px-6">
-              Be the first guest to share their photos or videos using the action buttons above!
+              There are no uploaded wedding memories matching your search terms or category filter. Try clearing filters or resetting search criteria.
             </p>
           </div>
         ) : (
+          /* PINTEREST-STYLE MASONRY LAYOUT FOR REAL STORIES */
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 [column-fill:_balance] box-border">
             {filteredMemories.map((item, index) => {
               const isLiked = likedMemories.includes(item.id);
@@ -212,42 +369,56 @@ export default function GallerySection() {
                 <motion.div
                   key={item.id}
                   layoutId={`memory-card-${item.id}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ 
+                    duration: 0.8, 
+                    delay: Math.min(index * 0.08, 0.4), 
+                    ease: [0.22, 1, 0.36, 1] 
+                  }}
                   className="break-inside-avoid relative rounded-xl overflow-hidden shadow-md border border-[#E8DDD0] bg-white group cursor-pointer pointer-events-auto"
                   onClick={() => setSelectedMemory(item)}
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  whileHover={{ 
+                    y: -6, 
+                    boxShadow: '0 15px 30px -10px rgba(0, 0, 0, 0.12)',
+                    transition: { duration: 0.3, ease: 'easeOut' }
+                  }}
                 >
                   {/* Photo or Video Thumbnail */}
-                  {item.type === 'photo' ? (
-                    <img
-                      src={item.url}
-                      alt={item.caption}
-                      referrerPolicy="no-referrer"
-                      className="w-full object-cover max-h-[480px] min-h-[160px] opacity-95 group-hover:opacity-100 transition-opacity duration-300"
-                    />
-                  ) : (
-                    <div className="relative w-full aspect-video min-h-[180px] bg-neutral-900 flex items-center justify-center">
-                      {item.url.startsWith('data:') ? (
-                        <video
-                          src={item.url}
-                          className="w-full max-h-[300px] object-cover"
-                          muted
-                          playsInline
-                        />
-                      ) : (
-                        <img
-                          src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=400"
-                          alt="Video Placeholder"
-                          className="w-full h-full object-cover opacity-50 blur-sm"
-                        />
-                      )}
-                      {/* Video Indicator */}
-                      <span className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <span className="h-12 w-12 rounded-full bg-white/85 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
-                          <span className="border-t-8 border-b-8 border-l-12 border-t-transparent border-b-transparent border-l-[#2B2B2B] ml-1" />
+                  <div className="overflow-hidden relative">
+                    {item.type === 'photo' ? (
+                      <img
+                        src={item.url}
+                        alt={item.caption}
+                        referrerPolicy="no-referrer"
+                        className="w-full object-cover max-h-[480px] min-h-[160px] opacity-95 group-hover:opacity-100 scale-100 group-hover:scale-[1.04] transition-transform duration-700 ease-out pointer-events-none"
+                      />
+                    ) : (
+                      <div className="relative w-full aspect-video min-h-[180px] bg-neutral-900 flex items-center justify-center">
+                        {item.url.startsWith('data:') ? (
+                          <video
+                            src={item.url}
+                            className="w-full max-h-[300px] object-cover scale-100 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+                            muted
+                            playsInline
+                          />
+                        ) : (
+                          <img
+                            src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=400"
+                            alt="Video Placeholder"
+                            className="w-full h-full object-cover opacity-50 blur-sm scale-100 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+                          />
+                        )}
+                        {/* Video Indicator */}
+                        <span className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <span className="h-12 w-12 rounded-full bg-white/85 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <span className="border-t-8 border-b-8 border-l-12 border-t-transparent border-b-transparent border-l-[#2B2B2B] ml-1" />
+                          </span>
                         </span>
-                      </span>
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Absolute badging */}
                   <span className="absolute top-3 left-3 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-semibold tracking-wider text-[#2B2B2B] uppercase shadow-sm border border-[#E8DDD0]">
@@ -273,7 +444,7 @@ export default function GallerySection() {
                     <div className="flex items-center justify-between mt-4 border-t border-[#FFF9F2]/80 pt-3">
                       <button
                         onClick={(e) => handleLike(item.id, e)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all text-xs font-sans pointer-events-auto ${
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all text-xs font-sans pointer-events-auto cursor-pointer ${
                           isLiked 
                             ? 'bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 font-medium' 
                             : 'bg-gray-50 text-gray-400 hover:text-[#D4AF37]'

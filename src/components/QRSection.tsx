@@ -94,21 +94,31 @@ export default function QRSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 items-center bg-white/70 backdrop-blur-md rounded-2xl border border-[#E8DDD0] p-6 md:p-10 shadow-xl max-w-3xl mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+          className="grid md:grid-cols-2 gap-8 items-center bg-white/70 backdrop-blur-md rounded-2xl border border-[#E8DDD0] p-6 md:p-10 shadow-xl max-w-3xl mx-auto"
+        >
           
           {/* Printable Wedding QR Container Card */}
-          <div className="relative rounded-xl border-2 border-double border-[#D4AF37]/50 bg-[#FFF9F2] p-6 text-center shadow-md">
+          <motion.div 
+            animate={{ y: [-8, 8, -8] }}
+            transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
+            className="relative rounded-xl border-2 border-double border-[#D4AF37]/50 bg-[#FFF9F2] p-6 text-center shadow-md"
+          >
             {/* Elegant Monogram Ring Elements */}
             <div className="absolute top-2 left-2 text-[#D4AF37]/35 text-xs font-serif italic">T & C</div>
             <div className="absolute top-2 right-2 text-[#D4AF37]/35 text-xs font-serif italic">2026</div>
 
-            <h3 className="font-cursive text-3xl text-[#D4AF37] mb-1">Tafadzwa & Chengeto</h3>
-            <p className="text-[10px] uppercase tracking-widest font-sans font-medium text-[#2B2B2B]/60 mb-4">
+            <h3 className="font-cursive text-3xl text-[#D4AF37] mb-1 select-none">Tafadzwa & Chengeto</h3>
+            <p className="text-[10px] uppercase tracking-widest font-sans font-medium text-[#2B2B2B]/60 mb-4 select-none">
               Matrimonial Celebration • August 29, 2026
             </p>
 
             {/* QR Framework */}
-            <div className="w-56 h-56 mx-auto bg-white p-3 rounded-lg border border-[#E8DDD0] flex items-center justify-center shadow-inner relative group">
+            <div className="w-56 h-56 mx-auto bg-white p-3 rounded-lg border border-[#E8DDD0] flex items-center justify-center shadow-inner relative group select-none ring-4 ring-[#D4AF37]/10 animate-pulse">
               <img
                 src={qrImageUrl}
                 alt="Matrimonial QR Code Link"
@@ -120,10 +130,10 @@ export default function QRSection() {
               </div>
             </div>
 
-            <p className="text-xs font-sans text-[#2B2B2B]/70 mt-4 italic">
+            <p className="text-xs font-sans text-[#2B2B2B]/70 mt-4 italic select-none">
               "Scan this card with your phone camera to share your memories instantly."
             </p>
-          </div>
+          </motion.div>
 
           {/* Controls Panel */}
           <div className="flex flex-col gap-5 justify-center">
@@ -137,9 +147,11 @@ export default function QRSection() {
 
             <div className="flex flex-col gap-3 mt-2">
               {/* Copy link */}
-              <button
+              <motion.button
                 onClick={handleCopyLink}
-                className="flex items-center justify-between px-4 py-3 rounded-xl border border-[#E8DDD0] bg-white hover:bg-[#FFF9F2] text-sm text-[#2B2B2B] transition-all duration-300 font-sans shadow-sm"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center justify-between px-4 py-3 rounded-xl border border-[#E8DDD0] bg-white hover:bg-[#FFF9F2] text-sm text-[#2B2B2B] transition-all duration-300 font-sans shadow-sm cursor-pointer"
               >
                 <span className="flex items-center gap-3">
                   {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-[#D4AF37]" />}
@@ -148,28 +160,32 @@ export default function QRSection() {
                 <span className="text-[10px] text-gray-400 bg-gray-100 px-2 py-1 rounded">
                   {currentUrl.substring(0, 20)}...
                 </span>
-              </button>
+              </motion.button>
 
               {/* Print Code Card */}
-              <button
+              <motion.button
                 onClick={handlePrint}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2B2B2B] hover:bg-[#D4AF37] text-white hover:text-[#2B2B2B] transition-all duration-300 text-sm font-sans shadow-md"
+                whileHover={{ scale: 1.02, backgroundColor: '#D4AF37', color: '#2B2B2B' }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2B2B2B] text-white transition-all duration-300 text-sm font-sans shadow-md cursor-pointer"
               >
                 <Printer className="h-4 w-4" />
                 <span>Print Table Placard flyers</span>
-              </button>
+              </motion.button>
 
               {/* Direct Link download option */}
-              <a
+              <motion.a
                 href={qrImageUrl}
                 download="Tafadzwa-Chengeto-Wedding-Memory-QR.png"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#D4AF37]/30 bg-white hover:bg-[#FFF9F2] text-[#2B2B2B] transition-all duration-300 text-sm font-sans shadow-sm justify-center"
+                whileHover={{ scale: 1.02, borderColor: '#D4AF37' }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#D4AF37]/30 bg-white hover:bg-[#FFF9F2] text-[#2B2B2B] transition-all duration-300 text-sm font-sans shadow-sm justify-center cursor-pointer"
               >
                 <Download className="h-4 w-4 text-[#D4AF37]" />
                 <span>Download QR image (.PNG)</span>
-              </a>
+              </motion.a>
             </div>
 
             <div className="mt-2 text-[11px] text-[#2B2B2B]/50 flex items-center gap-1.5 font-sans justify-center md:justify-start">
@@ -178,7 +194,7 @@ export default function QRSection() {
             </div>
           </div>
           
-        </div>
+        </motion.div>
       </div>
     </section>
   );
